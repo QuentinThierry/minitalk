@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qthierry <qthierry@student.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 04:33:51 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/06 05:32:02 by qthierry         ###   ########.fr       */
+/*   Updated: 2022/12/08 01:04:41 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,35 +46,35 @@ size_t	ft_strlen(const char *s)
 	return ((size_t)(s - cpy));
 }
 
-void	ft_bzero(void *s, size_t n)
+void	ft_bzero(int *s, size_t n)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < n)
-		((char *)s)[i++] = 0;
+		s[i++] = 0;
 }
 
-int	lst_add_back(t_list **list, char *content)
-{
-	t_list	*tmp;
-	t_list	*added;
+//int	lst_add_back(t_list **list, char *content)
+//{
+//	t_list	*tmp;
+//	t_list	*added;
 
-	if (!content || !*content)
-		return (1);
-	added = malloc(sizeof(t_list));
-	if (!added)
-		return (0);
-	ft_memmove(added->buffer, content, ft_strlen(content) + 1);
-	added->next = NULL;
-	if (!*list)
-	{
-		*list = added;
-		return (1);
-	}
-	tmp = *list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = added;
-	return (1);
-}
+//	if (!content || !*content)
+//		return (1);
+//	added = malloc(sizeof(t_list));
+//	if (!added)
+//		return (0);
+//	ft_memmove(added->buffer, content, ft_strlen(content) + 1);
+//	added->next = NULL;
+//	if (!*list)
+//	{
+//		*list = added;
+//		return (1);
+//	}
+//	tmp = *list;
+//	while (tmp->next)
+//		tmp = tmp->next;
+//	tmp->next = added;
+//	return (1);
+//}

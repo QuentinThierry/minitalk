@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qthierry <qthierry@student.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 10:31:15 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/06 05:35:26 by qthierry         ###   ########.fr       */
+/*   Updated: 2022/12/08 00:58:45 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,29 @@ int main(int argc, char const *argv[])
 	if (argc < 3)
 		return (EXIT_FAILURE);
 	pid = atoi(argv[1]);
-	size = strlen(argv[2]);
-
+	size = strlen(argv[2]) + 1;
+	value = size;
 	i = 0;
-	while (i <= size)
+	j = 0;
+
+	while (j < 31)
+	{
+		if (j == 0)
+			value <<= 1;
+		g_has_return_sig = 0;
+		//printf("send : %ld\n", (value & 0x40000000));
+		if (!(value & 0x80000000))
+			send_signal_zero(pid);
+		else
+			send_signal_one(pid);
+		value <<= 1;
+		j++;
+		while (!g_has_return_sig)
+		{
+		}
+	}
+
+	while (i < size)
 	{
 		j = 0;
 		value = argv[2][i];
@@ -68,6 +87,7 @@ int main(int argc, char const *argv[])
 				send_signal_zero(pid);
 			else
 				send_signal_one(pid);
+			//printf("send : %ld, argv : %c\n", (value & 0x80), argv[2][i]);
 			value <<= 1;
 			j++;
 			while (!g_has_return_sig)

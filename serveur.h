@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serveur.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qthierry <qthierry@student.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:33:56 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/06 05:32:14 by qthierry         ###   ########.fr       */
+/*   Updated: 2022/12/08 01:04:46 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,9 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
-typedef struct s_list
-{
-	char			buffer[1024];
-	struct s_list	*next;
-}	t_list;
-
-int	lst_add_back(t_list **list, char *content);
 size_t	ft_strlen(const char *s);
-void	ft_bzero(void *s, size_t n);
+void	ft_bzero(int *s, size_t n);
 
 #endif
