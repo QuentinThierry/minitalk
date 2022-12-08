@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serveur.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qthierry <qthierry@student.fr>             +#+  +:+       +#+        */
+/*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 10:21:13 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/08 01:22:36 by qthierry         ###   ########.fr       */
+/*   Updated: 2022/12/08 19:00:00 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,14 @@
 
 int	*g_tab;
 
-void afficher_binaire(int n) {
-	for(int i = 31*sizeof(char); i >= 0; --i) {
-		putchar((n & (1 << i)) ? '1' : '0');
-	}
-	putchar('\n');
-}
-
-static int	*allocate_tab()
+static int	*allocate_tab(void)
 {
 	unsigned int	tmp;
 	int				*res;
 
 	tmp = g_tab[1] - 0x80000000;
-	//printf("tmp alloc : %d\n", tmp + 3);
 	free(g_tab);
-	res = malloc(sizeof(char) * (tmp + 4));
+	res = malloc(sizeof(int) * (tmp + 4));
 	if (!res)
 		return (NULL);
 	ft_bzero(res, (int)(tmp + 4));
@@ -40,11 +32,46 @@ static int	*allocate_tab()
 	return (res);
 }
 
-void	add_to_buffer(int to_add, siginfo_t *info, void* vp)
+void	handle_characters(int to_add)
+{
+	char	*tmp;
+	long	size;
+	long	i;
+
+	g_tab[g_tab[1] + 4] <<= 1;
+	g_tab[g_tab[1] + 4] += (to_add == SIGUSR2);
+	g_tab[2]++;
+	if (g_tab[2] == 8)
+	{
+		g_tab[2] = 0;
+		g_tab[1]++;
+	}
+	if (g_tab[1] != g_tab[3])
+		return ;
+	size = sizeof(char) * g_tab[1];
+	i = -1;
+	tmp = malloc(size);
+	if (!tmp)
+		exit ((free(g_tab), EXIT_FAILURE));
+	while (++i < size)
+		tmp[i] = g_tab[i + 4] & 0xff;
+	write(1, tmp, size);
+	free(tmp);
+	free(g_tab);
+	g_tab = NULL;
+}
+
+void	on_signal(int to_add, siginfo_t *info, void *vp)
 {
 	(void)vp;
-
-	// fill length
+	if (!g_tab)
+	{
+		g_tab = malloc(sizeof(int) * 2);
+		if (!g_tab)
+			exit(EXIT_FAILURE);
+		g_tab[0] = 0;
+		g_tab[1] = 0x1;
+	}
 	if (g_tab[0] == 0)
 	{
 		g_tab[1] <<= 1;
@@ -53,73 +80,31 @@ void	add_to_buffer(int to_add, siginfo_t *info, void* vp)
 		{
 			g_tab = allocate_tab();
 			if (!g_tab)
-				exit(EXIT_FAILURE);
+				exit((EXIT_FAILURE));
 		}
 	}
 	else
-	{
-		//printf("meta : %d, %d, %d, %d\n", g_tab[0], g_tab[1], g_tab[2], g_tab[3]);
-
-		g_tab[g_tab[1] + 4] <<= 1;
-		g_tab[g_tab[1] + 4] += (to_add == SIGUSR2);
-		g_tab[2]++;
-		//afficher_binaire(g_tab[g_tab[1] + 4]);
-		//write(1, "\n", 1);
-		//printf("g_tab[%d] = %d\n", g_tab[1] + 4, g_tab[g_tab[1] + 4]);
-		if (g_tab[2] == 32)
-		{
-			//printf("final : %d\n", g_tab[g_tab[1] + 4]);
-			g_tab[2] = 0;
-			//afficher_binaire(g_tab[g_tab[1] + 4]);
-			g_tab[1]++;
-		}
-		if (g_tab[1] == (g_tab[3] / 4))
-		{
-			for (int i = 0; i < g_tab[1]; i++)
-			{
-				for (int j = 3; j >= 0; j--)
-				{
-					printf("%c", (*(g_tab + 4 + i)) >> j * 8);
-					fflush(stdout);
-				}
-			}
-			
-			//printf("%s\n", (char *)(g_tab + 4));
-			ft_bzero(g_tab, g_tab[1] + 4);
-			g_tab[0] = 0;
-			g_tab[1] = 0x1;
-		}
-	}
+		handle_characters(to_add);
 	kill(info->si_pid, SIGUSR1);
 }
 
-
-void	print_pid()
+void	print_pid(void)
 {
-	printf("%d\n", getpid());
+	ft_putnbr_fd(getpid(), 1);
 }
 
-int main(int argc, char const *argv[])
+int	main(void)
 {
 	struct sigaction	act;
 
-	(void)argc;
-	(void)argv;
 	print_pid();
-	g_tab = malloc(sizeof(char) * 2);
-	if (!g_tab)
-		return (EXIT_FAILURE);
+	g_tab = NULL;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_SIGINFO;
-
-	g_tab[0] = 0;
-	g_tab[1] = 0x1;
-	act.sa_sigaction = &add_to_buffer;
+	act.sa_sigaction = &on_signal;
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
 	while (1)
-	{
-		pause();
-	}
+		;
 	return (0);
 }

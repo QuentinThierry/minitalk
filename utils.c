@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qthierry <qthierry@student.fr>             +#+  +:+       +#+        */
+/*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 04:33:51 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/08 01:04:41 by qthierry         ###   ########.fr       */
+/*   Updated: 2022/12/08 19:01:37 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,44 @@ void	ft_bzero(int *s, size_t n)
 		s[i++] = 0;
 }
 
-//int	lst_add_back(t_list **list, char *content)
-//{
-//	t_list	*tmp;
-//	t_list	*added;
+void	ft_putnbr_fd(int n, int fd)
+{
+	unsigned int	ncpy;
+	char			c;
 
-//	if (!content || !*content)
-//		return (1);
-//	added = malloc(sizeof(t_list));
-//	if (!added)
-//		return (0);
-//	ft_memmove(added->buffer, content, ft_strlen(content) + 1);
-//	added->next = NULL;
-//	if (!*list)
-//	{
-//		*list = added;
-//		return (1);
-//	}
-//	tmp = *list;
-//	while (tmp->next)
-//		tmp = tmp->next;
-//	tmp->next = added;
-//	return (1);
-//}
+	ncpy = n * (1 | -(n < 0));
+	if (n < 0)
+		write(fd, "-", 1);
+	if (ncpy >= 10)
+	{
+		ft_putnbr_fd(ncpy / 10, fd);
+		ft_putnbr_fd(ncpy % 10, fd);
+	}
+	else
+	{
+		c = ncpy + '0';
+		write(fd, &c, 1);
+	}
+}
+
+int	ft_atoi(const char *nptr)
+{
+	int	res;
+	int	sign;
+
+	res = 0;
+	sign = 1;
+	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
+		nptr++;
+	if (!(*nptr >= '0' && *nptr <= '9'))
+	{
+		if (*nptr == '-')
+			sign = -1;
+		else if (*nptr != '+')
+			return (0);
+		nptr++;
+	}
+	while ((*nptr >= '0' && *nptr <= '9'))
+		res = res * 10 + *nptr++ - '0';
+	return (res * sign);
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qthierry <qthierry@student.fr>             +#+  +:+       +#+        */
+/*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 10:31:15 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/08 00:58:45 by qthierry         ###   ########.fr       */
+/*   Updated: 2022/12/08 19:02:00 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,87 +14,94 @@
 
 int	g_has_return_sig;
 
-void	send_signal_zero(int pid)
-{
-	kill(pid, SIGUSR1);
-}
+// void	send_signal_zero(pid_t pid)
+// {
+// 	kill(pid, SIGUSR1);
+// }
 
-void	send_signal_one(int pid)
-{
-	kill(pid, SIGUSR2);
-}
+// void	send_signal_one(int pid)
+// {
+// 	if (SIGUSR2 == )
+// 	kill(pid, SIGUSR2);
+// }
 
-void afficher_binaire(int n) {
-	for(int i = 31*sizeof(char); i >= 0; --i) {
-		putchar((n & (1 << i)) ? '1' : '0');
-	}
-}
-
-void	set_ready(int to_add)
+void	set_ready(int to_add, siginfo_t *info, void *vp)
 {
 	(void)to_add;
+	(void)info;
+	(void)vp;
 	g_has_return_sig = 1;
 }
 
-
-int main(int argc, char const *argv[])
+void	send_length(int size, pid_t pid)
 {
-	int		pid;
-	size_t	size;
+	size_t	j;
+	size_t	size_int;
+
+	j = 0;
+	size_int = sizeof(int) * 8;
+	while (j < size_int - 1)
+	{
+		g_has_return_sig = 0;
+		if (j == 0)
+			size <<= 1;
+		if (!(size & 0x80000000))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		size <<= 1;
+		j++;
+		while (!g_has_return_sig)
+			;
+	}
+}
+
+void	send_string(size_t size, char const **argv, pid_t pid)
+{
 	size_t	i;
 	size_t	j;
 	size_t	value;
-	struct	sigaction act;
+	size_t	size_char;
 
-	g_has_return_sig = 1;
-	sigemptyset(&act.sa_mask);
-	// act.sa_flags = SA_SIGINFO;
-	act.sa_handler = &set_ready;
-	sigaction(SIGUSR1, &act, NULL);
-	if (argc < 3)
-		return (EXIT_FAILURE);
-	pid = atoi(argv[1]);
-	size = strlen(argv[2]) + 1;
-	value = size;
 	i = 0;
-	j = 0;
-
-	while (j < 31)
-	{
-		if (j == 0)
-			value <<= 1;
-		g_has_return_sig = 0;
-		//printf("send : %ld\n", (value & 0x40000000));
-		if (!(value & 0x80000000))
-			send_signal_zero(pid);
-		else
-			send_signal_one(pid);
-		value <<= 1;
-		j++;
-		while (!g_has_return_sig)
-		{
-		}
-	}
-
+	value = size;
+	size_char = 8 * sizeof(char);
 	while (i < size)
 	{
 		j = 0;
 		value = argv[2][i];
-		while (j < 8)
+		while (j < size_char)
 		{
 			g_has_return_sig = 0;
 			if (!(value & 0x80))
-				send_signal_zero(pid);
+				kill(pid, SIGUSR1);
 			else
-				send_signal_one(pid);
-			//printf("send : %ld, argv : %c\n", (value & 0x80), argv[2][i]);
+				kill(pid, SIGUSR2);
 			value <<= 1;
 			j++;
 			while (!g_has_return_sig)
-			{
-			}
+				;
 		}
 		i++;
 	}
-	return 0;
+}
+
+int	main(int argc, char const **argv)
+{
+	int					pid;
+	size_t				size;
+	struct sigaction	act;
+
+	g_has_return_sig = 0;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = SA_SIGINFO;
+	act.sa_sigaction = &set_ready;
+	sigaction(SIGUSR1, &act, NULL);
+	if (argc != 3)
+		return (EXIT_FAILURE);
+	pid = ft_atoi(argv[1]);
+	size = ft_strlen(argv[2]) + 1;
+	send_length(size, pid);
+	send_string(size, argv, pid);
+	return (EXIT_SUCCESS);
 }
