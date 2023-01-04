@@ -6,14 +6,14 @@
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:33:56 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/08 19:00:44 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 16:57:14 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVEUR_H
 # define SERVEUR_H
 
-# define _XOPEN_SOURCE 700 // a enlever, fix erreur vscode
+# define _XOPEN_SOURCE 700 // fix erreur vscode
 
 # include <stdio.h>
 # include <unistd.h>

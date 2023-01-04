@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   serveur.c                                          :+:      :+:    :+:   */
+/*   serveur_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 10:21:13 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/09 14:27:57 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 16:50:40 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	on_signal(int to_add, siginfo_t *info, void *vp)
 void	print_pid(void)
 {
 	ft_putnbr_fd(getpid(), 1);
+	write(1, "\n", 1);
 }
 
 int	main(void)

@@ -6,7 +6,7 @@
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 04:33:51 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/09 14:27:48 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 16:59:13 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	ft_atoi(const char *nptr)
 		if (*nptr == '-')
 			sign = -1;
 		else if (*nptr != '+')
-			return (0);
+			return (-1);
 		nptr++;
 	}
 	while ((*nptr >= '0' && *nptr <= '9'))
