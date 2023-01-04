@@ -8,7 +8,7 @@ OBJSSERVEUR_BONUS = $(SRCSSERVEUR_BONUS:.c=.o)
 SRCSCLIENT_BONUS = Srcs/client_bonus.c Srcs/utils_bonus.c
 OBJSCLIENT_BONUS = $(SRCSCLIENT_BONUS:.c=.o)
 
-DEPS = Includes/serveur.h Includes/client.h 
+DEPS = Includes/serveur.h Includes/client.h Includes/serveur_bonus.h Includes/client_bonus.h
 
 NAME = server
 NAME1 = client
