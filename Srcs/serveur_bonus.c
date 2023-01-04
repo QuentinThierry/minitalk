@@ -6,11 +6,11 @@
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 10:21:13 by qthierry          #+#    #+#             */
-/*   Updated: 2023/01/04 16:50:40 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 18:02:14 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Includes/serveur.h"
+#include "../Includes/serveur_bonus.h"
 
 int	*g_tab;
 

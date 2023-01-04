@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 10:31:15 by qthierry          #+#    #+#             */
-/*   Updated: 2022/12/09 14:27:54 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 18:02:09 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Includes/client.h"
+#include "../Includes/client_bonus.h"
 
 int	g_has_return_sig;
 
@@ -88,6 +88,8 @@ int	main(int argc, char const **argv)
 	if (argc != 3)
 		return (EXIT_FAILURE);
 	pid = ft_atoi(argv[1]);
+	if (pid < 0)
+		return (1);
 	size = ft_strlen(argv[2]) + 1;
 	send_length(size, pid);
 	send_string(size, argv, pid);
