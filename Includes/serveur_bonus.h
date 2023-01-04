@@ -6,12 +6,12 @@
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:33:56 by qthierry          #+#    #+#             */
-/*   Updated: 2023/01/04 18:01:42 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 18:11:11 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVEUR_H
-# define SERVEUR_H
+#ifndef SERVEUR_BONUS_H
+# define SERVEUR_BONUS_H
 
 // # define _XOPEN_SOURCE 700 // fix erreur vscode
 

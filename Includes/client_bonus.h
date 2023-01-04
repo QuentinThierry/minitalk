@@ -6,12 +6,12 @@
 /*   By: qthierry <qthierry@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:34:34 by qthierry          #+#    #+#             */
-/*   Updated: 2023/01/04 18:01:36 by qthierry         ###   ########.fr       */
+/*   Updated: 2023/01/04 18:11:18 by qthierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#ifndef CLIENT_BONUS_H
+# define CLIENT_BONUS_H
 
 // # define _XOPEN_SOURCE 700 // fix erreur vscode
 
